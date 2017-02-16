@@ -15,7 +15,7 @@ swiftc BluetoothConnector.swift
 ```
 
 #### With Automator to bind a shortcut to it (this is how I'm using it)
-I included an Automator workflow service that calls BluetoothConnector from `/usr/local/bin` to make it easier to run BluetoothConnector with a keyboard workflow (this is how I'm using it). First you need to compile a binary and move it to `/usr/bin/` like this:
+I included an Automator workflow service that calls BluetoothConnector from `/usr/local/bin` to make it easier to run BluetoothConnector with a keyboard workflow (this is how I'm using it). First you need to compile a binary and move it to `/usr/local/bin/` like this:
 ```
 swiftc BluetoothConnector.swift
 sudo mv BluetoothConnector /usr/local/bin/BluetoothConnector

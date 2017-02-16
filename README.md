@@ -4,7 +4,7 @@ Simple macOS CLI to connect/disconnect a Bluetooth device. I made it to easily c
 # Usage
 #### With the Swift CLI
 ```
-swift BluetoothConnector 00-00-00-00-00-00
+swift BluetoothConnector.swift 00-00-00-00-00-00
 ```
 Replace `00-00-00-00-00-00` is your device's MAC address. You can get it by alt-clicking the Bluetooth menu icon or by running BluetoothConnector without any arguments
 

@@ -4,6 +4,7 @@ Simple macOS CLI to connect/disconnect a Bluetooth device. I made it to easily c
 You can download a compiled version here: https://github.com/lapfelix/BluetoothConnector/releases
 
 If you have issues running the compiled binary (`permission denied` error), try running this command in Terminal:
+
 `chmod +x /path/to/BluetoothConnector`
 
 # Usage

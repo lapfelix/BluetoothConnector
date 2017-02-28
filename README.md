@@ -2,6 +2,7 @@
 Simple macOS CLI to connect/disconnect a Bluetooth device. I made it to easily connect my BeatsX earbuds (I thought the W1 chip would make the switch from my iPhone to my Mac seamless, but we're not there yet, apparently). There's probably a program that already does this but I didn't find it.
 
 You can download a compiled version here: https://github.com/lapfelix/BluetoothConnector/releases
+(or from here when AWS is down: https://www.dropbox.com/s/kxt8c5n3cgxfenh/BluetoothConnector.zip?dl=1)
 
 If you have issues running the compiled binary (`permission denied` error), try running this command in Terminal:
 

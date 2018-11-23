@@ -51,13 +51,20 @@ if !bluetoothDevice.isPaired() {
     exit(-4)
 }
 
+var error : IOReturn = -1
+
 if bluetoothDevice.isConnected() {
     if (action == "disconnect" || action == nil) {
-        bluetoothDevice.closeConnection()
+        error = bluetoothDevice.closeConnection()
     }
 }
 else {
     if (action == "connect" || action == nil) {
-        bluetoothDevice.openConnection()
+        error = bluetoothDevice.openConnection()
     }
+}
+
+if error > 0 {
+    print("\(action ?? "toggle") failed")
+    exit(-1)
 }

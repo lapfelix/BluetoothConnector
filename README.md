@@ -14,7 +14,7 @@ mv .build/release/BluetoothConnector /usr/local/bin/BluetoothConnector
 ```
 
 #### Running
-Replace `00-00-00-00-00-00` is your device's MAC address. You can get it by alt-clicking the Bluetooth menu icon or by running BluetoothConnector without any arguments
+Replace `00-00-00-00-00-00` with your device's MAC address. You can get it by alt-clicking the Bluetooth menu icon or by running BluetoothConnector without any arguments
 
 To toggle the connection (connect/disconnect):
 ```

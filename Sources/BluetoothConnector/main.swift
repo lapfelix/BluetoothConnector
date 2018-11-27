@@ -22,7 +22,7 @@ let dictionary = cliParser.parseArgs(CommandLine.arguments)
 
 guard let deviceAddress = dictionary["address"] else {
     printHelp()
-    exit(-3)
+    exit(0)
 }
 
 guard let bluetoothDevice = IOBluetoothDevice(addressString: deviceAddress) else {

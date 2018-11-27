@@ -9,6 +9,7 @@ If you have issues running the compiled binary (`permission denied` error), try 
 # Usage
 #### Compiling and installing
 ```
+swift package update
 swift build
 mv .build/release/BluetoothConnector /usr/local/bin/BluetoothConnector
 ```

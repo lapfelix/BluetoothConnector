@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "BluetoothConnector",
+    products: [
+        .executable(name: "BluetoothConnector", targets: ["BluetoothConnector"]),
+    ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/lapfelix/SimpleCLI.git", from: "0.1.0"),

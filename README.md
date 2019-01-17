@@ -6,14 +6,23 @@ You can download a compiled version here: https://github.com/lapfelix/BluetoothC
 If you have issues running the compiled binary (`permission denied` error), try running this command in Terminal:
 `chmod +x /path/to/BluetoothConnector`
 
-# Usage
-#### Compiling and installing
+# Installation
+### [Mint](https://github.com/yonaskolb/Mint)
+```
+mint install lapfelix/BluetoothConnector
+```
+
+### Manually
 ```
 swift package update
 swift build -c release
 mv .build/release/BluetoothConnector /usr/local/bin/BluetoothConnector
 ```
 
+### Homebrew
+_Coming soon!_
+
+# Usage
 #### Running
 Replace `00-00-00-00-00-00` with your device's MAC address. You can get it by alt-clicking the Bluetooth menu icon or by running BluetoothConnector without any arguments
 

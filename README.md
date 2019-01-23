@@ -7,6 +7,12 @@ If you have issues running the compiled binary (`permission denied` error), try 
 `chmod +x /path/to/BluetoothConnector`
 
 # Installation
+
+### [Homebrew](https://brew.sh)
+```
+brew install bluetoothconnector
+```
+
 ### [Mint](https://github.com/yonaskolb/Mint)
 ```
 mint install lapfelix/BluetoothConnector
@@ -18,9 +24,6 @@ swift package update
 swift build -c release
 mv .build/release/BluetoothConnector /usr/local/bin/BluetoothConnector
 ```
-
-### Homebrew
-_Coming soon!_
 
 # Usage
 #### Running

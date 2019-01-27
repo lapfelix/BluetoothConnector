@@ -13,10 +13,19 @@ func printHelp() {
     })
 }
 
+func printAndNotify(_ content: String, notify: Bool) {
+    if (notify) {
+        Process.launchedProcess(launchPath: "/usr/bin/osascript", arguments: ["-e", "display notification \"\(content)\" with title \"BluetoothConnector\""])
+    }
+
+    print(content)
+}
+
 let cliParser = SimpleCLI(configuration: [
     Argument(longName: "connect", shortName: "c", type: .keyOnly, defaultValue: "false"),
     Argument(longName: "disconnect", shortName: "d", type: .keyOnly, defaultValue: "false"),
     Argument(longName: "address", type: .valueOnly, obligatory: true, inputName: "00-00-00-00-00-00"),
+    Argument(longName: "notify", shortName: "n", type: .keyOnly, defaultValue: "false"),
     ])
 let dictionary = cliParser.parseArgs(CommandLine.arguments)
 
@@ -25,13 +34,18 @@ guard let deviceAddress = dictionary["address"] else {
     exit(0)
 }
 
+var notify = false
+if let notifyString = dictionary["notify"] {
+    notify = Bool(notifyString) ?? false
+}
+
 guard let bluetoothDevice = IOBluetoothDevice(addressString: deviceAddress) else {
-    print("Device not found")
+    printAndNotify("Device not found", notify: notify)
     exit(-2)
 }
 
 if !bluetoothDevice.isPaired() {
-    print("Not paired to device")
+    printAndNotify("Not paired to device", notify: notify)
     exit(-4)
 }
 
@@ -46,17 +60,44 @@ if let disconnectString = dictionary["disconnect"] {
 }
 
 var error : IOReturn = -1
-var action = "Toggle"
-if !connectOnly && bluetoothDevice.isConnected() {
-    action = "Disconnection"
-    error = bluetoothDevice.closeConnection()
+
+enum ActionType {
+    case Connection
+    case Disconnect
 }
-else if (!disconnectOnly) {
-    action = "Connection"
+
+var action : ActionType
+
+let alreadyConnected = bluetoothDevice.isConnected()
+let shouldConnect = (connectOnly
+                     || (!connectOnly && !disconnectOnly && !alreadyConnected))
+
+if shouldConnect {
+    action = .Connection
     error = bluetoothDevice.openConnection()
+}
+else {
+    action = .Disconnect
+    error = bluetoothDevice.closeConnection()
 }
 
 if error > 0 {
-    print("Error: \(action) failed")
+    printAndNotify("Error: \(action) failed", notify: notify)
     exit(-1)
+} else if notify {
+    if action == .Connection && alreadyConnected {
+        printAndNotify("Already connected", notify: notify)
+    }
+    else if action == .Disconnect && !alreadyConnected {
+        printAndNotify("Already disconnected", notify: notify)
+    }
+    else {
+        switch action {
+            case .Connection: 
+                printAndNotify("Successfully connected", notify: notify)
+            
+            case .Disconnect: 
+                printAndNotify("Successfully disconnected", notify: notify)
+        }
+    }
 }

@@ -21,6 +21,31 @@ func printAndNotify(_ content: String, notify: Bool) {
     print(content)
 }
 
+func turnOnBluetoothIfNeeded(notify: Bool) {
+    guard let bluetoothHost = IOBluetoothHostController.default(),
+    bluetoothHost.powerState != kBluetoothHCIPowerStateON else { return }
+
+    // Definitely not App Store safe
+    if let iobluetoothClass = NSClassFromString("IOBluetoothPreferences") as? NSObject.Type {
+        let obj = iobluetoothClass.init()
+        let selector = NSSelectorFromString("setPoweredOn:")
+        if (obj.responds(to: selector)) {
+            obj.perform(selector, with: 1)
+        }
+    }
+
+    var timeWaited : UInt32 = 0
+    let interval : UInt32 = 200000 // in microseconds
+    while (bluetoothHost.powerState != kBluetoothHCIPowerStateON) {
+        usleep(interval)
+        timeWaited += interval
+        if (timeWaited > 5000000) {
+            printAndNotify("Failed to turn on Bluetooth", notify: notify)
+            exit(-2)
+        }
+    }
+}
+
 let cliParser = SimpleCLI(configuration: [
     Argument(longName: "connect", shortName: "c", type: .keyOnly, defaultValue: "false"),
     Argument(longName: "disconnect", shortName: "d", type: .keyOnly, defaultValue: "false"),
@@ -73,7 +98,8 @@ let shouldConnect = (connectOnly
                      || (!connectOnly && !disconnectOnly && !alreadyConnected))
 
 if shouldConnect {
-    action = .Connection
+    action = .Connection    
+    turnOnBluetoothIfNeeded(notify: notify)
     error = bluetoothDevice.openConnection()
 }
 else {
@@ -93,7 +119,7 @@ if error > 0 {
     }
     else {
         switch action {
-            case .Connection: 
+            case .Connection:
                 printAndNotify("Successfully connected", notify: notify)
             
             case .Disconnect: 

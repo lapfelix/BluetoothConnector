@@ -59,7 +59,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>/usr/local/bin/BluetoothConnector 00-00-00-00-00-00 --connect</string>
+					<string>/usr/local/bin/BluetoothConnector 00-00-00-00-00-00 --connect --notify</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

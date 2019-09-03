@@ -49,6 +49,7 @@ func turnOnBluetoothIfNeeded(notify: Bool) {
 let cliParser = SimpleCLI(configuration: [
     Argument(longName: "connect", shortName: "c", type: .keyOnly, defaultValue: "false"),
     Argument(longName: "disconnect", shortName: "d", type: .keyOnly, defaultValue: "false"),
+    Argument(longName: "status", shortName: "s", type: .keyOnly, defaultValue: "false"),
     Argument(longName: "address", type: .valueOnly, obligatory: true, inputName: "00-00-00-00-00-00"),
     Argument(longName: "notify", shortName: "n", type: .keyOnly, defaultValue: "false"),
     ])
@@ -84,6 +85,23 @@ if let disconnectString = dictionary["disconnect"] {
     disconnectOnly = Bool(disconnectString) ?? false
 }
 
+var statusOnly = false
+if let statusString = dictionary["status"] {
+    statusOnly = Bool(statusString) ?? false
+}
+
+let alreadyConnected = bluetoothDevice.isConnected()
+
+if statusOnly {
+    if alreadyConnected {
+        print("Connected")
+    }
+    else {
+        print("Disconnected")
+    }
+    exit(0)
+}
+
 var error : IOReturn = -1
 
 enum ActionType {
@@ -93,7 +111,6 @@ enum ActionType {
 
 var action : ActionType
 
-let alreadyConnected = bluetoothDevice.isConnected()
 let shouldConnect = (connectOnly
                      || (!connectOnly && !disconnectOnly && !alreadyConnected))
 

@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "SimpleCLI",
-        "repositoryURL": "https://github.com/lapfelix/SimpleCLI.git",
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "5a0fae89107ddae95189221d0aa1a8152cc73ade",
-          "version": "0.1.9"
+          "revision": "35b76bf577d3cc74820f8991894ce3bcdf024ddc",
+          "version": "0.0.2"
         }
       }
     ]

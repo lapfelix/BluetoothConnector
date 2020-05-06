@@ -1,6 +1,10 @@
 import IOBluetooth
 import ArgumentParser
 
+func utilityName() -> String {
+  return URL(fileURLWithPath: CommandLine.arguments.first ?? "¯\\_(ツ)_/¯").lastPathComponent
+}
+
 func getDeviceListHelpString() -> String {
     var helpString = "\nMAC Address missing. Get the MAC address from the list below (if your device is missing, pair it with your computer first):"
     IOBluetoothDevice.pairedDevices().forEach({(device) in
@@ -14,12 +18,12 @@ func getDeviceListHelpString() -> String {
     return helpString
 }
 
-func printAndNotify(_ content: String, notify: Bool) {
+func printAndNotify(title: String, body: String, notify: Bool) {
     if (notify) {
-        Process.launchedProcess(launchPath: "/usr/bin/osascript", arguments: ["-e", "display notification \"\(content)\" with title \"BluetoothConnector\""])
+        Process.launchedProcess(launchPath: "/usr/bin/osascript", arguments: ["-e", "display notification \"\(body)\" with title \"\(title)\""])
     }
 
-    print(content)
+    print(body)
 }
 
 func turnOnBluetoothIfNeeded(notify: Bool) {
@@ -41,7 +45,7 @@ func turnOnBluetoothIfNeeded(notify: Bool) {
         usleep(interval)
         timeWaited += interval
         if (timeWaited > 5000000) {
-            printAndNotify("Failed to turn on Bluetooth", notify: notify)
+            printAndNotify(title: utilityName(), body: "Failed to turn on Bluetooth", notify: notify)
             exit(-2)
         }
     }
@@ -54,12 +58,12 @@ enum ActionType {
 
 func execute(macAddress: String, connectOnly: Bool, disconnectOnly: Bool, notify: Bool, statusOnly: Bool) {
     guard let bluetoothDevice = IOBluetoothDevice(addressString: macAddress) else {
-        printAndNotify("Device not found", notify: notify)
+        printAndNotify(title: utilityName(), body: "Device not found", notify: notify)
         exit(-2)
     }
 
     if !bluetoothDevice.isPaired() {
-        printAndNotify("Not paired to device", notify: notify)
+        printAndNotify(title: utilityName(), body: "Not paired to device", notify: notify)
         exit(-4)
     }
 
@@ -80,7 +84,7 @@ func execute(macAddress: String, connectOnly: Bool, disconnectOnly: Bool, notify
     var error : IOReturn = -1
     var action : ActionType
     if shouldConnect {
-        action = .Connection    
+        action = .Connection
         turnOnBluetoothIfNeeded(notify: notify)
         error = bluetoothDevice.openConnection()
     }
@@ -89,23 +93,24 @@ func execute(macAddress: String, connectOnly: Bool, disconnectOnly: Bool, notify
         error = bluetoothDevice.closeConnection()
     }
 
+    let title = bluetoothDevice.name ?? utilityName()
     if error > 0 {
-        printAndNotify("Error: \(action) failed", notify: notify)
+        printAndNotify(title: title, body: "\(action) failed", notify: notify)
         exit(-1)
     } else if notify {
         if action == .Connection && alreadyConnected {
-            printAndNotify("Already connected", notify: notify)
+            printAndNotify(title: title, body: "Already connected", notify: notify)
         }
         else if action == .Disconnect && !alreadyConnected {
-            printAndNotify("Already disconnected", notify: notify)
+            printAndNotify(title: title, body: "Already disconnected", notify: notify)
         }
         else {
             switch action {
                 case .Connection:
-                    printAndNotify("Successfully connected", notify: notify)
-                
-                case .Disconnect: 
-                    printAndNotify("Successfully disconnected", notify: notify)
+                    printAndNotify(title: title, body: "Connected", notify: notify)
+
+                case .Disconnect:
+                    printAndNotify(title: title, body: "Disconnected", notify: notify)
             }
         }
     }
@@ -130,7 +135,7 @@ struct BluetoothConnector: ParsableCommand {
     var macAddress: String?
 
     static var configuration = CommandConfiguration(
-        commandName: "BluetoothConnector",
+        commandName: utilityName(),
         abstract: "Connect/disconnects Bluetooth devices.",
         discussion: "Default behavior is to toggle between connecting and disconnecting.")
 
@@ -148,7 +153,7 @@ struct BluetoothConnector: ParsableCommand {
                 throw ValidationError("Can't disconnect with status flag enabled.")
             }
         }
-        
+
         if let address = macAddress {
             if address.replacingOccurrences(of: "-", with: "").count != 12 {
                 throw ValidationError("Invalid MAC address: \(address).")
@@ -160,7 +165,7 @@ struct BluetoothConnector: ParsableCommand {
     }
 
     func run() throws {
-        execute(macAddress: macAddress!, connectOnly: connect, disconnectOnly: disconnect, notify: notify, statusOnly: status) 
+        execute(macAddress: macAddress!, connectOnly: connect, disconnectOnly: disconnect, notify: notify, statusOnly: status)
     }
 }
 

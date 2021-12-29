@@ -118,16 +118,16 @@ func execute(macAddress: String, connectOnly: Bool, disconnectOnly: Bool, notify
 
 struct BluetoothConnector: ParsableCommand {
     @Flag(name: .shortAndLong, help: "Connect a device")
-    var connect: Bool = false
+    var connect: Bool
 
     @Flag(name: .shortAndLong, help: "Disconnect a device")
-    var disconnect: Bool = false
+    var disconnect: Bool
 
     @Flag(name: .shortAndLong, help: "Get the status of a device")
-    var status: Bool = false
+    var status: Bool
 
     @Flag(name: .shortAndLong, help: "Post a Notification Center notification")
-    var notify: Bool = false
+    var notify: Bool
 
     @Argument(help: ArgumentHelp(
         "The MAC address of the device. Format: 00-00-00-00-00-00 or 000000000000",

@@ -1,5 +1,4 @@
 import XCTest
-@testable import BluetoothConnector
 
 final class BluetoothConnectorTests: XCTestCase {
     func testExample() {

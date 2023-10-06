@@ -20,6 +20,6 @@ let package = Package(
             dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),]),
         .testTarget(
             name: "BluetoothConnectorTests",
-            dependencies: ["BluetoothConnector"]),
+            dependencies: ["BluetoothConnector",.product(name: "ArgumentParser", package: "swift-argument-parser")]),
     ]
 )

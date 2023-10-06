@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "BluetoothConnector",
+    platforms: [.macOS(.v10_13)],
     products: [
         .executable(name: "BluetoothConnector", targets: ["BluetoothConnector"]),
     ],
@@ -17,7 +18,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .executableTarget(
             name: "BluetoothConnector",
-            dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),]),
+            dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ]),
         .testTarget(
             name: "BluetoothConnectorTests",
             dependencies: ["BluetoothConnector",.product(name: "ArgumentParser", package: "swift-argument-parser")]),

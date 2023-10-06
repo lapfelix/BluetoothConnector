@@ -6,16 +6,24 @@ func utilityName() -> String {
 }
 
 func getDeviceListHelpString() -> String {
-    var helpString = "\nMAC Address missing. Get the MAC address from the list below (if your device is missing, pair it with your computer first):"
-    IOBluetoothDevice.pairedDevices().forEach({(device) in
+    let header = "\nMAC Address missing. Get the MAC address from the list below (if your device is missing, pair it with your computer first):"
+    let columnTitles = "MAC Address         Status      RSSI   Device Name"
+    var helpLines = [header, columnTitles]
+    
+    IOBluetoothDevice.pairedDevices().forEach { device in
         guard let device = device as? IOBluetoothDevice,
-        let addressString = device.addressString,
-        let deviceName = device.name
+              let addressString = device.addressString,
+              let deviceName = device.name
         else { return }
-        helpString += "\n\(addressString) - \(deviceName)"
-    })
-    helpString += "\n"
-    return helpString
+        
+        let connected = device.isConnected()
+        let connectedString = connected ? "Connected" : "         "
+        let rssiString = connected ? String(format: "%4d", Int(device.rawRSSI())) : "    "
+        
+        helpLines.append([addressString, connectedString, rssiString, deviceName].joined(separator: "   "))
+    }
+    
+    return helpLines.joined(separator: "\n")
 }
 
 func printAndNotify(title: String, body: String, notify: Bool) {

@@ -90,7 +90,14 @@ func execute(macAddress: String, connectOnly: Bool, disconnectOnly: Bool, notify
     }
     else {
         action = .Disconnect
-        error = bluetoothDevice.closeConnection()
+
+        // call closeConnection up to 10 times with a 500ms delay between each call until the connection is closed
+        var attempts = 0
+        while (attempts < 10 && bluetoothDevice.isConnected()) {
+            error = bluetoothDevice.closeConnection()
+            usleep(500000)
+            attempts += 1
+        }
     }
 
     let title = bluetoothDevice.name ?? utilityName()

@@ -1,0 +1,7 @@
+version: 1
+builder:
+  configs:
+  - platform: macos-spm
+    swift_version: '5.9'
+  - platform: macos-xcodebuild
+    swift_version: '5.9'

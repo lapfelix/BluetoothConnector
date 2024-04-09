@@ -64,5 +64,14 @@ To reduce Notification Center pollution, I'd recommend turning off "Show in Noti
 #### With Automator to bind a shortcut to it (this is how I'm using it)
 I included an Automator workflow service that calls BluetoothConnector from `/usr/local/bin` to make it easier to run BluetoothConnector with a keyboard workflow (this is how I'm using it).
 
-Then open the Automator workflow and you should get a prompt to install it (don't forget to change the MAC address).
-To bind a shortcut to the Automator service, launch System Preferences and Go to `Keyboard > Shortcuts > Services`, find your service and add a shortcut to it.
+To this, you will need a copy of this repo, a `brew` install is not enough.
+
+1. Clone the repo.
+2. In the root directory there is a file named "Connect Bluetooth Device.workflow", click on it, accept the install prompt.
+3. In settings, `Keyboard > Shortcuts > Services > General` and bind the Bluetooth Connect to whatever you'd like.
+4. Set the MAC address, the workflow can be found in `/Users/\[username]/Library/Services, open it and set your MAC address.
+5. Create a link: in terminal, head over to `usr/local/bin` and create a link to your `brew` install.
+   1. Something like: `sudo ln -s /opt/homebrew/Cellar/bluetoothconnector/2.1.0/bin/BluetoothConnector`
+
+Test out the keyboard shortcut!
+You will need to grant permissions the first time you run the workflow.
